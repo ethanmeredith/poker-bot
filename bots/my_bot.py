@@ -59,7 +59,7 @@ def decide(state):
     raise_to(state.min_raise * 2)
 
     if state.street == "preflop":
-        strong = is_pair(state.my_cards) and rank(state.my_cards[0]) >= 9
+        strong = is_pair(state.my_cards) and rank(state.my_cards[0]) >= 9 and len(state.opponents_in_hand) <= 2
     else:
         strong = strength >= 0.7
 
