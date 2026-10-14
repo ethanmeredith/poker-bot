@@ -100,14 +100,16 @@ def hand_strength(my_cards: list[str], board: list[str]) -> float:
     This is deliberately simple, so improving it is a great place to start.
     It doesn't know whether the board helps your opponents just as much.
     """
-    kind = hand_type(my_cards + board)
+    board_kind = hand_type(board)
+    hand_kind = hand_type(my_cards + board)
+
     high = max(rank(c) for c in my_cards) if my_cards else 2
     low = min(rank(c) for c in my_cards) if my_cards else 2
 
-    if kind >= 2:
+    if hand_kind > board_kind and hand_kind >= 2:
         # Two pair or better: 0.6 up to 1.0
-        return 0.6 + 0.05 * kind
-    if kind == 1:
+        return 0.6 + 0.05 * hand_kind
+    if hand_kind > board_kind and hand_kind == 1:
         # One pair: 0.4-0.5, higher for a higher card in your hand
         return 0.4 + 0.1 * (high - 2) / 12
 
