@@ -14,10 +14,10 @@ first: see "Practising on your own computer" in README.md):
 On Windows, type `python` (or `py`) instead of `python3`.
 """
 from pokerbot import all_in, call, check, fold, raise_to, run
-from pokerbot.cards import describe_hand, hand_strength, is_pair, rank
+from pokerbot.cards import describe_hand, is_pair, rank, hand_strength
+import random
 
-BOT_NAME = "MyBot"   # change this to your team's name!
-
+BOT_NAME = "EthanM"   # change this to your team's name!
 
 def decide(state):
     """
@@ -56,14 +56,19 @@ def decide(state):
 
     # 1. Big hand: raise! Before the flop, a high pair (nines or better) is
     #    strong. After the flop, look for three of a kind or better.
+    raise_to(state.min_raise * 2)
+
     if state.street == "preflop":
         strong = is_pair(state.my_cards) and rank(state.my_cards[0]) >= 9
     else:
         strong = strength >= 0.7
 
-    if strong and state.can_raise:
+    if random.randint(0,100) == 1 or strength >= 0.8:
+        all_in()
+
+    if (strong and state.can_raise) or random.randint(0,10) == 1:
         # Raise to three times the minimum, but never more than we're allowed
-        return raise_to(min(state.min_raise * 3, state.max_raise))
+        return raise_to(min(state.pot * 0.10, state.max_raise))
 
     # 2. Free to stay in? Then check.
     if state.can_check:
