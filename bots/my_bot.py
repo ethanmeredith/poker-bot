@@ -58,24 +58,21 @@ def decide(state):
     #    strong. After the flop, look for three of a kind or better.
     raise_to(state.min_raise * 2)
 
-    bluff_chance = {}
-
-    for i in state.opponents:
-        bluff_chance[i] = 0
+    bluff_chance = 0
 
     for i in state.history:
         if i.action == 'raise' and i.amount >= state.pot * 0.1 and i.name in state.opponents:
-            bluff_chance[i.name] = bluff_chance[i.name] + 0.05
+            bluff_chance = bluff_chance + 0.05
 
     if state.street == "preflop":
         strong = is_pair(state.my_cards) and rank(state.my_cards[0]) >= 9
     else:
         strong = strength >= 0.7
 
-    if random.randint(0,100) == 1 or strength >= 0.85:
+    if random.randint(0,1000) == 1 or strength >= 0.85:
         return all_in()
 
-    if (strong and state.can_raise) or random.randint(0,10) == 1:
+    if (strong and state.can_raise and bluff_chance < 0.3) or random.randint(0,10) == 1:
         # Raise to three times the minimum, but never more than we're allowed
         return raise_to(int(max(min(state.pot * 0.10, state.max_raise), state.min_raise)))
 
