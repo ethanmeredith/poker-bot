@@ -59,23 +59,23 @@ def decide(state):
     raise_to(state.min_raise * 2)
 
     if state.street == "preflop":
-        strong = is_pair(state.my_cards) and rank(state.my_cards[0]) >= 9 and len(state.opponents_in_hand) <= 2
+        strong = is_pair(state.my_cards) and rank(state.my_cards[0]) >= 9
     else:
         strong = strength >= 0.7
 
-    if random.randint(1,1000) == 1 or strength >= 0.85:
+    if random.randint(1,100) == 1 or strength >= 0.95:
         return all_in()
 
     if (strong and state.can_raise) or random.randint(1,10) == 1:
         # Raise to three times the minimum, but never more than we're allowed
-        return raise_to(int(max(min(state.pot * 0.10, state.max_raise), state.min_raise)))
+        return raise_to(int(max(min(state.pot * 0.20, state.max_raise), state.min_raise)))
 
     # 2. Free to stay in? Then check.
     if state.can_check:
         return check()
 
     # 3. Decent hand, or calling is cheap compared to the pot: call.
-    if strength >= 0.3 or state.pot_odds <= 0.2:
+    if strength >= 0.4 or state.pot_odds <= 0.1:
         return call()
 
     # 4. Otherwise, give up.

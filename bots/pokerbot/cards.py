@@ -112,6 +112,8 @@ def hand_strength(my_cards: list[str], board: list[str]) -> float:
     if hand_kind > board_kind and hand_kind == 1:
         # One pair: 0.4-0.5, higher for a higher card in your hand
         return 0.4 + 0.1 * (high - 2) / 12
+    if hand_kind < board_kind:
+        return 0
 
     # Nothing made yet: judge your two cards
     score = 0.1 + 0.15 * (high - 2) / 12 + 0.1 * (low - 2) / 12
